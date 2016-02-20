@@ -30,10 +30,18 @@ class Kintone::Api
     :file
   ].freeze
 
+  # password: nil の場合はAPIトークン認証
   def initialize(domain, user, password)
-    token = Base64.encode64("#{user}:#{password}")
     url = "https://#{domain}"
-    headers = { 'X-Cybozu-Authorization' => token }
+
+    headers = nil
+    if password.nil?
+      headers = { 'X-Cybozu-API-Token' => user }
+    else
+      token = Base64.encode64("#{user}:#{password}")
+      headers = { 'X-Cybozu-Authorization' => token }
+    end
+
     @connection =
       Faraday.new(url: url, headers: headers) do |builder|
         builder.request :url_encoded
