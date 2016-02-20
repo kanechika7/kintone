@@ -31,7 +31,7 @@ class Kintone::Api
   ].freeze
 
   # password: nil の場合はAPIトークン認証
-  def initialize(domain, user, password)
+  def initialize(domain, user, password=nil)
     url = "https://#{domain}"
 
     headers = nil
